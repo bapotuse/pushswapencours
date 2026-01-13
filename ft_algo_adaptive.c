@@ -98,6 +98,7 @@ static void	sort_low_disorder(t_stack **a, t_stack **b)
 void	adaptive_sort(t_stack **a, t_stack **b, double *disorder_out)
 {
 	double	disorder;
+	int		size;
 
 	if (!a || !*a)
 	{
@@ -105,9 +106,15 @@ void	adaptive_sort(t_stack **a, t_stack **b, double *disorder_out)
 			*disorder_out = 0.0;
 		return ;
 	}
+	size = stack_size(*a);
 	disorder = compute_disorder(*a);
 	if (disorder_out)
 		*disorder_out = disorder;
+	if (size <= 5)
+	{
+		simple_sort(a, b);
+		return ;
+	}
 	if (disorder < 0.2)
 		sort_low_disorder(a, b);
 	else if (disorder < 0.5)
